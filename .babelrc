@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "esmodules": true
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime"
+    ],
+    [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  ],
+  "ignore": [],
+  "sourceMaps": true,
+  "retainLines": false,
+  "comments": false
+}

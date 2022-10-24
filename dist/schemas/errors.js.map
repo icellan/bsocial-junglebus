@@ -1,0 +1,1 @@
+{"version":3,"file":"errors.js","names":["Errors","Collection"],"sources":["../../src/schemas/errors.js"],"sourcesContent":["import { Collection } from '../lib/collection';\n\nexport const Errors = new Collection('errors');\n"],"mappings":"uIAEaA,MAAM,CAAG,GAAIC,uBAAU,CAAC,QAAQ,CAAC"}

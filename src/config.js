@@ -1,0 +1,24 @@
+import url from 'url';
+import config from '../config.json';
+
+export const DEBUG = !!(process.env.BSOCIAL_DEBUG || config.DEBUG || false);
+export const VERBOSE = !!(process.env.BSOCIAL_VERBOSE || config.VERBOSE || false);
+export const B_BITCOM_ADDRESS = '19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut';
+export const MAP_BITCOM_ADDRESS = '1PuQa7K62MiKCtssSLKy1kh56WWU7MtUR5';
+export const AIP_BITCOM_ADDRESS = '15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva';
+export const BAP_BITCOM_ADDRESS = '1BAPSuaPnfGnSBM3GLV9yhxUdYe4vGbdMT';
+export const SUBSCRIPTION_ID = process.env.BSOCIAL_SUBSCRIPTION_ID
+  || config.subscriptionId;
+export const BITFS_STORE = !!(process.env.BSOCIAL_BITFS_STORE || config.BITFS_STORE || false);
+export const BITFS_MAX_CONTENT_LENGTH = process.env.BSOCIAL_BITFS_MAX_LENGTH
+  || config.BITFS_MAX_LENGTH
+  || (10 * 1024 * 1024);
+
+export const mongoUrl = process.env.BSOCIAL_MONGO_URL || process.env.MONGO_URL || config.mongoUrl;
+if (!mongoUrl) {
+  console.error('No MongoDB connection defined in ENV or config.json');
+  process.exit(-1);
+}
+const parsedMongoUrl = url.parse(mongoUrl);
+export const dbName = parsedMongoUrl.pathname.replace(/\//g, '');
+export const bapApiUrl = process.env.BAP_API_URL || config.bapApiUrl || 'http://localhost:3000/v1';

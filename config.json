@@ -1,0 +1,8 @@
+{
+  "subscriptionId": "",
+  "mongoUrl": "mongodb://localhost:27017/bsocial-junglebus",
+  "bapApiUrl": "https://bap-api.com/v1",
+  "VERBOSE": false,
+  "BITFS_STORE": true,
+  "BITFS_MAX_LENGTH": 10485760
+}

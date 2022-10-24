@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator")),_yargs=_interopRequireDefault(require("yargs")),_yargs2=require("yargs/yargs"),_bsocial=require("./bsocial"),_config=require("./config"),options=(0,_yargs.default)((0,_yargs2.hideBin)(process.argv)).usage("Usage: -a <action>").option("s",{alias:"subscription",describe:"JungleBus subscription id",type:"string"}).argv;(0,_asyncToGenerator2.default)(function*(){console.log("Running continuous watch"),yield(0,_bsocial.indexBSocialTransactions)(options.subscription||_config.SUBSCRIPTION_ID)})().catch(a=>{console.error(a)});
+//# sourceMappingURL=index.js.map
