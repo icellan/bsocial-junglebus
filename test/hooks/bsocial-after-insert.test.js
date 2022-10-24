@@ -10,10 +10,13 @@ import { COMMENTS } from '../../src/schemas/comments';
 import { TIPS } from '../../src/schemas/tips';
 import { FOLLOWS } from '../../src/schemas/follows';
 import { PAYMENTS } from '../../src/schemas/payments';
+import { FRIENDS } from '../../dist/schemas/friends';
 
 const txId = 'bc2298e0db1edb01d37cab535e2d639c830a0cb703bbb78b903466b39fe1f0dd';
 const idKey = 'c38bc59316de9783b5f7a8ba19bc5d442f6c9b0988c48a241d1c58a1f4e9ae19';
+const idKey2 = 'd38bc59316de9783b5f7a8ba19bc5d442f6c9b0988c48a241d1c58a1f4e9ae20';
 const tx = '868e663652556fa133878539b6c65093e36bef1a6497e511bdf0655b2ce1c935';
+const tx2 = '968e663652556fa133878539b6c65093e36bef1a6497e511bdf0655b2ce1c936';
 const _id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}${tx}`)).toString('hex');
 
 const doc = {
@@ -49,7 +52,7 @@ const followDoc = {
   ]
 };
 const unFollowDoc = {
-  _id: txId,
+  _id: tx2,
   AIP: [
     {
       bapId: idKey,
@@ -64,6 +67,39 @@ const unFollowDoc = {
   ]
 };
 const follow_id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}follow_id_key`)).toString('hex');
+
+const friendDoc = {
+  _id: txId,
+  AIP: [
+    {
+      bapId: idKey,
+      verified: true,
+    }
+  ],
+  MAP: [
+    {
+      type: 'friend',
+      bapID: idKey2,
+      publicKey: 'public key of friend 1'
+    }
+  ]
+};
+const friend2Doc = {
+  _id: tx2,
+  AIP: [
+    {
+      bapId: idKey2,
+      verified: true,
+    }
+  ],
+  MAP: [
+    {
+      type: 'friend',
+      bapID: idKey,
+      publicKey: 'public key of friend 2'
+    }
+  ]
+};
 
 describe('bSocialAfterInsert like', () => {
   beforeEach(async () => {
@@ -196,5 +232,46 @@ describe('bSocialAfterInsert payment', () => {
     expect(payment.idKey).toBe(address);
     expect(payment.tx).toBe(tx);
     expect(payment.decryptionKey).toBe(useDoc.BPP[0].apiEndpoint);
+  });
+});
+
+describe('bSocialAfterInsert friend', () => {
+  beforeEach(async () => {
+    await FRIENDS.deleteMany({});
+  });
+
+  test('friend', async () => {
+    const useDoc = {...friendDoc};
+    const _id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}${idKey2}`)).toString('hex');
+    await bSocialAfterInsert(useDoc);
+    const friend = await FRIENDS.findOne();
+    expect(typeof friend).toBe('object');
+    expect(friend._id).toBe(_id);
+    expect(friend.txId).toBe(txId);
+    expect(friend.idKey).toBe(idKey);
+    expect(friend.friendIdKey).toBe(idKey2);
+    expect(friend.publicKey).toBe('public key of friend 1');
+  });
+
+  test('friend + friend', async () => {
+    const useDoc = {...friendDoc};
+    const _id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}${idKey2}`)).toString('hex');
+    await bSocialAfterInsert(useDoc);
+    const friend = await FRIENDS.findOne({_id});
+    expect(friend.idKey).toBe(idKey);
+    expect(friend.friendIdKey).toBe(idKey2);
+    expect(friend.publicKey).toBe('public key of friend 1');
+
+    const useDoc2 = {...friend2Doc};
+    const _id2 = bsv.crypto.Hash.sha256(Buffer.from(`${idKey2}${idKey}`)).toString('hex');
+    await bSocialAfterInsert(useDoc2);
+    const friend2 = await FRIENDS.findOne({_id: _id2});
+    expect(friend2.idKey).toBe(idKey2);
+    expect(friend2.friendIdKey).toBe(idKey);
+    expect(friend2.publicKey).toBe('public key of friend 2');
+    expect(friend2.accepted).toBe(txId);
+
+    const friendAgain = await FRIENDS.findOne({_id});
+    expect(friendAgain.accepted).toBe(tx2);
   });
 });

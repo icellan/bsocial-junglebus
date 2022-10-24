@@ -6,6 +6,7 @@ import { REPOSTS } from '../reposts';
 import { TIPS } from '../tips';
 import { PAYMENTS } from '../payments';
 import { FOLLOWS } from '../follows';
+import { FRIENDS } from '../friends';
 
 const updateActionStats = async function (
   txId,
@@ -116,6 +117,37 @@ const bSocialAfterInsertUnfollow = async function (txId, map, idKey) {
   }
 };
 
+const bSocialAfterInsertFriend = async function (txId, map, idKey) {
+  if (map.type === 'friend' && map.bapID) {
+    const _id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}${map.bapID}`)).toString('hex');
+    const existing = await FRIENDS.findOne({ _id });
+
+    const friend_id = bsv.crypto.Hash.sha256(Buffer.from(`${map.bapID}${idKey}`)).toString('hex');
+    const friendExisting = await FRIENDS.findOne({ _id: friend_id });
+
+    if (!existing) {
+      const registerAction = {
+        _id,
+        txId,
+        idKey,
+        friendIdKey: map.bapID,
+        publicKey: map.publicKey,
+        accepted: friendExisting ? friendExisting.txId : null,
+        t: Math.round(+new Date() / 1000),
+      };
+      await FRIENDS.insert(registerAction);
+    }
+
+    if (friendExisting) {
+      await FRIENDS.update({ _id: friend_id }, {
+        $set: {
+          accepted: txId,
+        }
+      });
+    }
+  }
+};
+
 export const bSocialAfterInsert = async function (doc) {
   // spec says the first AIP should be about the social stuff
   // second AIP should be the posting site if applicable
@@ -140,6 +172,8 @@ export const bSocialAfterInsert = async function (doc) {
           await bSocialAfterInsertFollow(txId, map, idKey);
         } else if (map.type === 'unfollow' && map.idKey) {
           await bSocialAfterInsertUnfollow(txId, map, idKey);
+        } else if (map.type === 'friend' && map.bapID) {
+          await bSocialAfterInsertFriend(txId, map, idKey);
         }
       }
     }

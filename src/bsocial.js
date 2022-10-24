@@ -275,16 +275,16 @@ export const isBSocialOp = function (op) {
   return false;
 };
 
-export const processBlockEvents = async function (op) {
+export const processBlockEvents = async function (op, block_height, block_time) {
   try {
     const txId = op.tx.h;
-    const block = op.blk && op.blk.i;
-    const timestamp = (op.blk && op.blk.t) || Math.round((+new Date()) / 1000);
+    const block = block_height;
+    const timestamp = block_time || Math.round((+new Date()) / 1000);
 
     /* eslint-disable no-await-in-loop */
     const bSocialOp = await parseBSocialTransaction(op);
     if (isBSocialOp(bSocialOp)) {
-      if (VERBOSE) console.log('got bSocial transaction', txId, block || 'mempool');
+      if (VERBOSE) console.log('got bSocial transaction', txId, block || 'mempool', block_time);
 
       bSocialOp._id = txId;
       bSocialOp.block = block;
