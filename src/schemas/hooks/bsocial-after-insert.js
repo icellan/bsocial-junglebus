@@ -122,8 +122,8 @@ const bSocialAfterInsertFriend = async function (txId, map, idKey) {
     const _id = bsv.crypto.Hash.sha256(Buffer.from(`${idKey}${map.bapID}`)).toString('hex');
     const existing = await FRIENDS.findOne({ _id });
 
-    const friend_id = bsv.crypto.Hash.sha256(Buffer.from(`${map.bapID}${idKey}`)).toString('hex');
-    const friendExisting = await FRIENDS.findOne({ _id: friend_id });
+    const friendId = bsv.crypto.Hash.sha256(Buffer.from(`${map.bapID}${idKey}`)).toString('hex');
+    const friendExisting = await FRIENDS.findOne({ _id: friendId });
 
     if (!existing) {
       const registerAction = {
@@ -139,10 +139,10 @@ const bSocialAfterInsertFriend = async function (txId, map, idKey) {
     }
 
     if (friendExisting) {
-      await FRIENDS.update({ _id: friend_id }, {
+      await FRIENDS.update({ _id: friendId }, {
         $set: {
           accepted: txId,
-        }
+        },
       });
     }
   }

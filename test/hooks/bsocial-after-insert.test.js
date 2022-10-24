@@ -10,7 +10,7 @@ import { COMMENTS } from '../../src/schemas/comments';
 import { TIPS } from '../../src/schemas/tips';
 import { FOLLOWS } from '../../src/schemas/follows';
 import { PAYMENTS } from '../../src/schemas/payments';
-import { FRIENDS } from '../../dist/schemas/friends';
+import { FRIENDS } from '../../src/schemas/friends';
 
 const txId = 'bc2298e0db1edb01d37cab535e2d639c830a0cb703bbb78b903466b39fe1f0dd';
 const idKey = 'c38bc59316de9783b5f7a8ba19bc5d442f6c9b0988c48a241d1c58a1f4e9ae19';

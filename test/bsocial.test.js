@@ -129,7 +129,6 @@ describe('database functions', () => {
     expect(bSocial.MAP[0].type).toEqual('tip');
     expect(bSocial.MAP[0].currency).toEqual('USD');
     expect(bSocial.MAP[0].amount).toEqual('0.1');
-    expect(bSocial.timestamp).toEqual(1612303485);
     expect(bSocial.processed).toEqual(true);
   });
 
