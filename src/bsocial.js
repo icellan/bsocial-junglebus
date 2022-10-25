@@ -17,6 +17,7 @@ import { getStatusValue, updateStatusValue } from './status';
 import { cleanDocumentKeys } from './lib/utils';
 import { getDB } from './lib/db';
 import { BSOCIAL_BITFS } from './schemas/bsocial-bitfs';
+import Random from './lib/random';
 
 export const FIRST_BSOCIAL_BLOCK = 671145;
 
@@ -298,6 +299,9 @@ export const processBlockEvents = async function (op, blockHeight, blockTime) {
       await addErrorTransaction(op);
     }
   } catch (e) {
+    if (!op) op = {
+      txId: Random.id(),
+    };
     op.error = JSON.stringify(e, Object.getOwnPropertyNames(e));
     await addErrorTransaction(op);
   }
