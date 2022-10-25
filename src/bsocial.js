@@ -299,9 +299,11 @@ export const processBlockEvents = async function (op, blockHeight, blockTime) {
       await addErrorTransaction(op);
     }
   } catch (e) {
-    if (!op) op = {
-      txId: Random.id(),
-    };
+    if (!op) {
+      op = {
+        txId: Random.id(),
+      };
+    }
     op.error = JSON.stringify(e, Object.getOwnPropertyNames(e));
     await addErrorTransaction(op);
   }
