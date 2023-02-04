@@ -244,6 +244,7 @@ describe('Twetch transaction', () => {
   });
 });
 
+/* BitFS is dead
 describe('bitfs data', () => {
   beforeEach(async () => {
     await BSOCIAL.deleteMany({});
@@ -291,3 +292,4 @@ describe('bitfs data', () => {
     expect(bitfsData.tx).toEqual(tx);
   });
 });
+*/

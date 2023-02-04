@@ -23,6 +23,7 @@ export const FIRST_BSOCIAL_BLOCK = 671145;
 
 export const BSOCIAL_VALID_ACTIONS = [
   'post',
+  'reply',
   'repost',
   'like',
   'follow',
@@ -290,6 +291,13 @@ export const processBlockEvents = async function (op, blockHeight, blockTime) {
       bSocialOp._id = txId;
       bSocialOp.block = block;
       bSocialOp.timestamp = timestamp;
+
+      // reply is not a valid BitcoinSchema action, so we'll use post
+      bSocialOp?.MAP?.forEach((map, index) => {
+        if (map.type === 'reply') {
+          bSocialOp.MAP[index].type = 'post';
+        }
+      });
 
       /* eslint-disable no-await-in-loop */
       await processBSocialTransaction(bSocialOp);

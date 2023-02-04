@@ -1,6 +1,6 @@
 {
   "name": "bsocial-junglebus",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Bitcoin Social indexer to MongoDB",
   "author": "icellan (https://github.com/icellan)",
   "license": "Open BSV License",
